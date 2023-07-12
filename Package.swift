@@ -47,8 +47,8 @@ let package = Package(
       .branch("fix/vision-os")),
     .package(
       name: "GTMAppAuth",
-      url: "https://github.com/google/GTMAppAuth.git",
-      from: "4.0.0"),
+      url: "https://github.com/mnkd/GTMAppAuth.git",
+      .branch("fix/build-error")),
     .package(
       name: "GTMSessionFetcher",
       url: "https://github.com/google/gtm-session-fetcher.git",
