@@ -33,9 +33,9 @@
 #import "GoogleSignIn/Sources/GIDSignIn_Private.h"
 #import "GoogleSignIn/Sources/GIDSignInPreferences.h"
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
 #import "GoogleSignIn/Sources/GIDEMMErrorHandler.h"
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
 
 #import "GoogleSignIn/Tests/Unit/GIDFakeFetcher.h"
 #import "GoogleSignIn/Tests/Unit/GIDFakeFetcherService.h"
@@ -270,9 +270,9 @@ static NSString *const kNewScope = @"newScope";
 
 - (void)setUp {
   [super setUp];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
   _isEligibleForEMM = [UIDevice currentDevice].systemVersion.integerValue >= 9;
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS&& TARGET_OS_VISION  && !TARGET_OS_MACCATALYST
   _saveAuthorizationReturnValue = YES;
 
   // States
@@ -412,7 +412,7 @@ static NSString *const kNewScope = @"newScope";
 
 - (void)testRestorePreviousSignInNoRefresh_hasPreviousUser {
   [[[_authorization stub] andReturn:_authState] authState];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
   [[_authorization expect] setDelegate:OCMOCK_ANY];
 #endif // TARGET_OS_IOS || !TARGET_OS_MACCATALYST
   OCMStub([_authState lastTokenResponse]).andReturn(_tokenResponse);
@@ -1072,7 +1072,7 @@ static NSString *const kNewScope = @"newScope";
 
 #pragma mark - EMM tests
 
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
 
 - (void)testEmmSupportRequestParameters {
   OCMStub(
@@ -1226,7 +1226,7 @@ static NSString *const kNewScope = @"newScope";
   XCTAssertNil(_signIn.currentUser, @"should not have current user");
 }
 
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
 
 #pragma mark - Helpers
 
@@ -1352,10 +1352,10 @@ static NSString *const kNewScope = @"newScope";
     [[[_authState expect] andReturn:tokenResponse] lastTokenResponse];
     [[[_authState expect] andReturn:tokenResponse] lastTokenResponse];
     if (oldAccessToken) {
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
       // Corresponds to EMM support
       [[[_authState expect] andReturn:authResponse] lastAuthorizationResponse];
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
       [[[_authState expect] andReturn:tokenResponse] lastTokenResponse];
       [[[_authState expect] andReturn:tokenResponse] lastTokenResponse];
       [[[_authState expect] andReturn:tokenRequest]
@@ -1423,10 +1423,10 @@ static NSString *const kNewScope = @"newScope";
     // maybeFetchToken
     if (!(authError || modalCancel)) {
       [[[_authState expect] andReturn:nil] lastTokenResponse];
-#if TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#if TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
       // Corresponds to EMM support
       [[[_authState expect] andReturn:authResponse] lastAuthorizationResponse];
-#endif // TARGET_OS_IOS && !TARGET_OS_MACCATALYST
+#endif // TARGET_OS_IOS || TARGET_OS_VISION && !TARGET_OS_MACCATALYST
       [[[_authState expect] andReturn:nil] lastTokenResponse];
       [[[_authState expect] andReturn:authResponse] lastAuthorizationResponse];
       [[[_authState expect] andReturn:authResponse] lastAuthorizationResponse];
